@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TTXEquipamentos</RootNamespace>
+    <AssemblyName>TTXEquipamentos</AssemblyName>
+    <!-- ReadyToRun: Pre-compiles IL to native code for faster startup (-30-40% startup time) -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <!-- Enable tiered compilation for better performance on weak PCs -->
+    <TieredCompilation>true</TieredCompilation>
+    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+    <TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops>
+    <!-- Self-contained deployment: Include .NET runtime so no installation needed -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>false</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- Garbage collection agressivo para VMs fracas -->
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <RetainVmMemory>false</RetainVmMemory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="ttx-dados\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <Resource Include="Resources\icon.png" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <!-- JSON Serialization (System.Text.Json é mais rápido que Newtonsoft) -->
+    <!-- Removed Newtonsoft.Json - using System.Text.Json instead -->
+    
+    <!-- Dependency Injection -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    
+    <!-- MVVM Toolkit -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    
+    <!-- Material Design - mantido para compatibilidade -->
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    
+    <!-- OxyPlot para gráficos -->
+    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
+    
+    <!-- Logging - Reduzido apenas para erro em produção -->
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <!-- Removed: Serilog.Sinks.Console -->
+  </ItemGroup>
+
+</Project>
