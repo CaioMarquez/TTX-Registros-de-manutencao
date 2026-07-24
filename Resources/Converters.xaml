@@ -1,0 +1,24 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TTXEquipamentos.Converters">
+
+  <!-- Value Converters -->
+  <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+  <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+  <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+  <local:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter" />
+  <local:EnumToDisplayNameConverter x:Key="EnumToDisplayNameConverter" />
+  <local:DateTimeToShortDateConverter x:Key="DateTimeToShortDateConverter" />
+  <local:InitialsConverter x:Key="InitialsConverter" />
+  <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
+  <local:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+  <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+  <local:TypeToVisibilityConverter x:Key="TypeToVisibilityConverter" />
+  <local:NatureDisplayConverter x:Key="NatureDisplayConverter" />
+  <local:MachineDisplayConverter x:Key="MachineDisplayConverter" />
+  <local:MachineTextDisplayConverter x:Key="MachineTextDisplayConverter" />
+  <local:ChecklistOkItemsConverter x:Key="ChecklistOkItemsConverter" />
+  <local:ChecklistOkVisibilityConverter x:Key="ChecklistOkVisibilityConverter" />
+  <local:HistoricChecklistVisibilityConverter x:Key="HistoricChecklistVisibilityConverter" />
+
+</ResourceDictionary>
