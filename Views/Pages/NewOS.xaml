@@ -1,0 +1,500 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.NewOS"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#F3F4F6" Title="Nova OS">
+  
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid Margin="32" MaxWidth="1000" HorizontalAlignment="Center">
+      <StackPanel>
+        <!-- Header -->
+        <TextBlock Text="Nova Ordem de Serviço" FontSize="28" FontWeight="Bold" Foreground="#14110E" />
+        <TextBlock Text="Registrar manutenção preventiva, corretiva ou nova instalação" Foreground="#6B7280" FontSize="15" Margin="0,4,0,24"/>
+
+        <!-- Tipo de Manutenção -->
+        <Border Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+          <StackPanel>
+            <TextBlock Text="Tipo de Manutenção" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            <Grid HorizontalAlignment="Stretch">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <!-- Preventiva -->
+              <RadioButton Grid.Column="0" GroupName="Type" IsChecked="{Binding IsPreventiva, Mode=OneWay}" Command="{Binding SetPreventivaCommand}" HorizontalAlignment="Stretch">
+                <RadioButton.Template>
+                  <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="Bd" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="2" Padding="16" Cursor="Hand" HorizontalAlignment="Stretch" MinWidth="280">
+                      <StackPanel Orientation="Horizontal">
+                        <Border Width="16" Height="16" CornerRadius="8" BorderBrush="#9CA3AF" BorderThickness="2" Margin="0,0,12,0" VerticalAlignment="Center">
+                          <Border x:Name="Dot" Width="8" Height="8" CornerRadius="4" Background="#3B82F6" Visibility="Collapsed"/>
+                        </Border>
+                        <StackPanel>
+                          <TextBlock Text="Preventiva" FontSize="16" FontWeight="SemiBold" Foreground="#14110E"/>
+                          <TextBlock Text="Manutenção programada" FontSize="13" Foreground="#6B7280"/>
+                        </StackPanel>
+                      </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="Bd" Property="BorderBrush" Value="#3B82F6"/>
+                        <Setter TargetName="Bd" Property="Background" Value="#EFF6FF"/>
+                        <Setter TargetName="Dot" Property="Visibility" Value="Visible"/>
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </RadioButton.Template>
+              </RadioButton>
+
+              <!-- Nova Instalação -->
+              <RadioButton Grid.Column="2" GroupName="Type" IsChecked="{Binding IsNovaInstalacao, Mode=OneWay}" Command="{Binding SetNovaInstalacaoCommand}" HorizontalAlignment="Stretch">
+                <RadioButton.Template>
+                  <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="Bd" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="2" Padding="16" Cursor="Hand" HorizontalAlignment="Stretch" MinWidth="280">
+                      <StackPanel Orientation="Horizontal">
+                        <Border Width="16" Height="16" CornerRadius="8" BorderBrush="#9CA3AF" BorderThickness="2" Margin="0,0,12,0" VerticalAlignment="Center">
+                          <Border x:Name="Dot" Width="8" Height="8" CornerRadius="4" Background="#10B981" Visibility="Collapsed"/>
+                        </Border>
+                        <StackPanel>
+                          <TextBlock Text="Nova Instalação" FontSize="16" FontWeight="SemiBold" Foreground="#14110E"/>
+                          <TextBlock Text="Registrar instalação" FontSize="13" Foreground="#6B7280"/>
+                        </StackPanel>
+                      </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="Bd" Property="BorderBrush" Value="#10B981"/>
+                        <Setter TargetName="Bd" Property="Background" Value="#ECFDF5"/>
+                        <Setter TargetName="Dot" Property="Visibility" Value="Visible"/>
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </RadioButton.Template>
+              </RadioButton>
+
+              <!-- Corretiva -->
+              <RadioButton Grid.Column="4" GroupName="Type" IsChecked="{Binding IsCorretiva, Mode=OneWay}" Command="{Binding SetCorretivaCommand}" HorizontalAlignment="Stretch">
+                <RadioButton.Template>
+                  <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="Bd" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="2" Padding="16" Cursor="Hand" HorizontalAlignment="Stretch" MinWidth="280">
+                      <StackPanel Orientation="Horizontal">
+                        <Border Width="16" Height="16" CornerRadius="8" BorderBrush="#9CA3AF" BorderThickness="2" Margin="0,0,12,0" VerticalAlignment="Center">
+                          <Border x:Name="Dot" Width="8" Height="8" CornerRadius="4" Background="#EF4444" Visibility="Collapsed"/>
+                        </Border>
+                        <StackPanel>
+                          <TextBlock Text="Corretiva" FontSize="16" FontWeight="SemiBold" Foreground="#14110E"/>
+                          <TextBlock Text="Reparo de falha" FontSize="13" Foreground="#6B7280"/>
+                        </StackPanel>
+                      </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="Bd" Property="BorderBrush" Value="#EF4444"/>
+                        <Setter TargetName="Bd" Property="Background" Value="#FEF2F2"/>
+                        <Setter TargetName="Dot" Property="Visibility" Value="Visible"/>
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </RadioButton.Template>
+              </RadioButton>
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- Informações Gerais -->
+        <Border Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+          <StackPanel>
+            <TextBlock Text="Informações" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+
+              <!-- Dates & Times -->
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="16"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="16"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="16"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                  <TextBlock Text="Data Início" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+                    <DatePicker x:Name="StartDatePicker" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="8,8" PreviewKeyDown="DatePicker_PreviewKeyDown" />
+                  </Border>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2">
+                  <TextBlock Text="Hora Início" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+                    <TextBox x:Name="StartTimeTextBox" Text="{Binding StartTime, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="12,10" VerticalContentAlignment="Center" PreviewTextInput="TimeTextBox_PreviewTextInput"/>
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                  <TextBlock Text="Data Fim" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+                    <DatePicker x:Name="EndDatePicker" SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="8,8" PreviewKeyDown="DatePicker_PreviewKeyDown" />
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="6">
+                  <TextBlock Text="Hora Fim" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+                    <TextBox x:Name="EndTimeTextBox" Text="{Binding EndTime, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="12,10" VerticalContentAlignment="Center" PreviewTextInput="TimeTextBox_PreviewTextInput"/>
+                  </Border>
+                </StackPanel>
+              </Grid>
+
+              <Grid Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="16"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                  <TextBlock Text="Solicitante" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+                    <TextBox Text="{Binding RequesterField, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="12,10" VerticalContentAlignment="Center"/>
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                  <TextBlock Text="Natureza" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42" Margin="0,0,0,8">
+                    <ComboBox SelectedValue="{Binding Nature, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Content" BorderThickness="0" Background="Transparent" Padding="8,0" VerticalContentAlignment="Center">
+                      <ComboBoxItem Content="mecanica" />
+                      <ComboBoxItem Content="eletrica" />
+                      <ComboBoxItem Content="outro" />
+                    </ComboBox>
+                  </Border>
+                  <TextBlock Text="Escreva a natureza da manutenção" FontSize="12" Foreground="#6B7280" Margin="0,8,0,6" Visibility="{Binding ShowNatureCustomField, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                  <Border Visibility="{Binding ShowNatureCustomField, Converter={StaticResource BoolToVisibilityConverter}}" CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+                    <TextBox Text="{Binding CustomNature, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="12,10" VerticalContentAlignment="Center" Foreground="#14110E"/>
+                  </Border>
+                </StackPanel>
+              </Grid>
+            </StackPanel>
+          </Border>
+
+        <!-- Nova Instalação -->
+        <Border Visibility="{Binding IsNovaInstalacao, Converter={StaticResource BoolToVisibilityConverter}}" Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+          <StackPanel>
+            <TextBlock Text="Nova Instalação" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+
+            <TextBlock Text="Área" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+            <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42" Margin="0,0,0,16">
+              <TextBox Text="{Binding InstallationArea, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="12,10" VerticalContentAlignment="Center"/>
+            </Border>
+
+            <TextBlock Text="Tipo" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+            <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+              <ComboBox ItemsSource="{Binding InstallationTypes}" SelectedItem="{Binding SelectedInstallationType}" BorderThickness="0" Background="Transparent" Padding="8,0" VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </Border>
+          </StackPanel>
+        </Border>
+
+        <!-- Equipamento -->
+        <Border Visibility="{Binding ShowMachineSelection, Converter={StaticResource BoolToVisibilityConverter}}" Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+          <StackPanel>
+            <TextBlock Text="Equipamento" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            
+            <TextBlock Text="Máquina" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+            
+            <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42" Margin="0,0,0,16">
+              <ComboBox x:Name="MachineComboBox" ItemsSource="{Binding FilteredMachines}" 
+                        SelectedItem="{Binding SelectedMachine, Mode=TwoWay}"
+                        Text="{Binding MachineSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsEditable="True"
+                        IsTextSearchEnabled="False"
+                        StaysOpenOnEdit="True"
+                        SelectionChanged="MachineComboBox_SelectionChanged"
+                        GotKeyboardFocus="MachineComboBox_GotKeyboardFocus"
+                        PreviewMouseLeftButtonDown="MachineComboBox_PreviewMouseLeftButtonDown"
+                        BorderThickness="0" Background="Transparent" FontSize="14" Padding="8,0" VerticalContentAlignment="Center">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock>
+                      <Run Text="{Binding Tag}" FontWeight="SemiBold"/> - <Run Text="{Binding Name}"/>
+                    </TextBlock>
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </Border>
+
+            <!-- Info Máquina -->
+            <TextBlock Text="{Binding SelectedMachineLabel}"
+                       FontSize="14" FontWeight="SemiBold" Foreground="#111827" Margin="0,0,0,8"
+                       Visibility="{Binding ShowMachineInfo, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <Grid Visibility="{Binding ShowMachineInfo, Converter={StaticResource BoolToVisibilityConverter}}">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              
+              <Border Grid.Column="0" Background="#F3F4F6" CornerRadius="6" Padding="12">
+                <StackPanel>
+                  <TextBlock Text="Área" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                  <TextBlock Text="{Binding MachineArea}" FontSize="14" FontWeight="SemiBold" Foreground="#14110E"/>
+                </StackPanel>
+              </Border>
+
+              <Border Grid.Column="2" Background="#F3F4F6" CornerRadius="6" Padding="12">
+                <StackPanel>
+                  <TextBlock Text="Tipo" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                  <TextBlock Text="{Binding Nature}" FontSize="14" FontWeight="SemiBold" Foreground="#14110E" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+              </Border>
+            </Grid>
+          </StackPanel>
+        </Border>
+
+
+        <Border Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+          <StackPanel>
+            <TextBlock Text="Mão de obra" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            <Grid Margin="0,0,0,16">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="0" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Background="#EFF4FB" Height="42">
+                <ComboBox ItemsSource="{Binding LaborUsers}" SelectedItem="{Binding SelectedLaborUser}" DisplayMemberPath="Name" BorderThickness="0" Background="Transparent" FontSize="14" Padding="12,0" VerticalContentAlignment="Center" Foreground="#14110E"/>
+              </Border>
+              <Button Grid.Column="1" Command="{Binding AddLaborCommand}" Margin="12,0,0,0" Padding="16,10" Cursor="Hand">
+                <Button.Template>
+                  <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="#3B82F6" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                      <TextBlock Text="+ Adicionar" FontSize="13" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                  </ControlTemplate>
+                </Button.Template>
+              </Button>
+            </Grid>
+            <TextBlock Text="Selecione o colaborador registrado. Caso ainda não tenha cadastrado, use a tela de Usuários." FontSize="12" Foreground="#6B7280" Margin="0,0,0,16"/>
+            <ItemsControl ItemsSource="{Binding LaborForce}" Margin="0,0,0,24">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Background="#F9FAFB" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBlock Text="{Binding Description}" FontSize="14" FontWeight="Medium" Foreground="#14110E" TextWrapping="Wrap"/>
+                      <Button Grid.Column="1" Command="{Binding DataContext.RemoveReportItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Padding="8,4" Cursor="Hand">
+                        <Button.Template>
+                          <ControlTemplate TargetType="Button">
+                            <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                              <TextBlock Text="Remover" FontSize="13" FontWeight="SemiBold" Foreground="#EF4444"/>
+                            </Border>
+                          </ControlTemplate>
+                        </Button.Template>
+                      </Button>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="Falha Aparente" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            <Grid Margin="0,0,0,16">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="0" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Background="#EFF4FB" MinHeight="42">
+                <TextBox Text="{Binding NewActivityItem, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" FontSize="14" Padding="12" VerticalContentAlignment="Top" Foreground="#14110E" ToolTip="Descreva a atividade" TextWrapping="Wrap" AcceptsReturn="True" MinLines="3"/>
+              </Border>
+            </Grid>
+
+
+            <TextBlock Text="Trabalho Executado" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            <Grid Margin="0,0,0,16">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="0" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Background="#EFF4FB" MinHeight="42">
+                <TextBox Text="{Binding NewIncidentItem, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" FontSize="14" Padding="12" VerticalContentAlignment="Top" Foreground="#14110E" ToolTip="Descreva a ocorrência" TextWrapping="Wrap" AcceptsReturn="True" MinLines="3"/>
+              </Border>
+            </Grid>
+
+            <TextBlock Text="Comentários" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            <Grid Margin="0,0,0,24">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="0" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Background="#EFF4FB" MinHeight="42">
+                <TextBox Text="{Binding NewCommentItem, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" FontSize="14" Padding="12" VerticalContentAlignment="Top" Foreground="#14110E" ToolTip="Digite um comentário" TextWrapping="Wrap" AcceptsReturn="True" MinLines="3"/>
+              </Border>
+            </Grid>
+
+            <TextBlock Text="Fotos" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,16"/>
+            <Grid Margin="0,0,0,16">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="Adicione fotos do serviço" VerticalAlignment="Center" Foreground="#6B7280"/>
+              <Button Grid.Column="1" Click="AddPhotoButton_Click" Margin="12,0,0,0" Padding="16,10" Cursor="Hand">
+                <Button.Template>
+                  <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="#3B82F6" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                      <TextBlock Text="+ Adicionar" FontSize="13" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                  </ControlTemplate>
+                </Button.Template>
+              </Button>
+            </Grid>
+            <ItemsControl ItemsSource="{Binding Photos}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="#F9FAFB" CornerRadius="8" Padding="8" Margin="0,0,12,12" Width="140">
+                      <StackPanel>
+                        <Border Height="96" Background="#E5E7EB" CornerRadius="6" Cursor="Hand">
+                          <Image Source="{Binding FilePath}" Stretch="UniformToFill" MouseLeftButtonUp="OpenPhoto"
+                                 RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0" HorizontalAlignment="Stretch">
+                          <TextBlock Text="{Binding FileName}" FontSize="12" Foreground="#14110E" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Width="88"/>
+                          <Button Command="{Binding DataContext.RemovePhotoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Padding="6,2" Cursor="Hand" HorizontalAlignment="Right">
+                            <Button.Template>
+                              <ControlTemplate TargetType="Button">
+                                <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                                  <TextBlock Text="Remover" FontSize="12" FontWeight="SemiBold" Foreground="#EF4444"/>
+                                </Border>
+                              </ControlTemplate>
+                            </Button.Template>
+                          </Button>
+                        </StackPanel>
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+          </StackPanel>
+        </Border>
+
+          <!-- Parts -->
+          <Border Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <Grid Margin="0,0,0,16">
+                <TextBlock Text="Peças/Itens Utilizados" FontSize="18" FontWeight="SemiBold" Foreground="#14110E" VerticalAlignment="Center"/>
+                <Button Command="{Binding AddPartCommand}" Cursor="Hand" HorizontalAlignment="Right" Padding="16,8">
+                  <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                      <Border x:Name="Bd" Background="White" CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Padding="{TemplateBinding Padding}">
+                        <TextBlock Text="+ Adicionar" FontSize="13" FontWeight="SemiBold" Foreground="#374151" HorizontalAlignment="Center"/>
+                      </Border>
+                    </ControlTemplate>
+                  </Button.Template>
+                </Button>
+              </Grid>
+
+              <ItemsControl ItemsSource="{Binding Parts}" Margin="0,0,0,16">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="#F9FAFB" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="12"/>
+                          <ColumnDefinition Width="60"/>
+                          <ColumnDefinition Width="12"/>
+                          <ColumnDefinition Width="100"/>
+                          <ColumnDefinition Width="12"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                          <TextBlock Text="Nome do Item" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                          <Border CornerRadius="4" BorderBrush="#D1D5DB" BorderThickness="1" Background="White" Height="36">
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="8,0" VerticalContentAlignment="Center" FontSize="13"/>
+                          </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                          <TextBlock Text="Qtd" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                          <Border CornerRadius="4" BorderBrush="#D1D5DB" BorderThickness="1" Background="White" Height="36">
+                            <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="8,0" VerticalContentAlignment="Center" FontSize="13"/>
+                          </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4">
+                          <TextBlock Text="Valor Unit." FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                          <Border CornerRadius="4" BorderBrush="#D1D5DB" BorderThickness="1" Background="White" Height="36">
+                            <TextBox Text="{Binding UnitCost, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" Padding="8,0" VerticalContentAlignment="Center" FontSize="13"/>
+                          </Border>
+                        </StackPanel>
+
+                        <Button Grid.Column="6" Command="{Binding DataContext.RemovePartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" 
+                                Cursor="Hand" VerticalAlignment="Bottom" Margin="0,0,0,2">
+                          <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                              <Border Background="Transparent" Padding="8">
+                                <TextBlock Text="Excluir" FontSize="13" Foreground="#EF4444" FontWeight="SemiBold"/>
+                              </Border>
+                            </ControlTemplate>
+                          </Button.Template>
+                        </Button>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+
+              <Border Visibility="{Binding HasParts, Converter={StaticResource BoolToVisibilityConverter}}" 
+                      Background="#FFF7ED" BorderBrush="#FED7AA" BorderThickness="1" CornerRadius="8" Padding="16" HorizontalAlignment="Right">
+                <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="#C2410C">
+                  <Run Text="Total: R$ "/>
+                  <Run Text="{Binding PartsTotal, Mode=OneWay, StringFormat=N2}"/>
+                </TextBlock>
+              </Border>
+
+              <TextBlock Visibility="{Binding HasParts, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}" 
+                         Text="Nenhum item adicionado" Foreground="#9CA3AF" FontStyle="Italic" HorizontalAlignment="Center" Margin="0,16"/>
+        </StackPanel>
+          </Border>
+
+        <!-- Actions -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,48">
+          <Button Command="{Binding CancelCommand}" Cursor="Hand" Width="120" Height="42" Margin="0,0,12,0">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border x:Name="Bd" Background="White" CornerRadius="8" BorderBrush="#D1D5DB" BorderThickness="1">
+                  <TextBlock Text="Cancelar" FontSize="14" FontWeight="SemiBold" Foreground="#374151" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
+          <Button Command="{Binding SaveCommand}" Cursor="Hand" Width="150" Height="42">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border x:Name="Bd" Background="#FF6A00" CornerRadius="8">
+                  <TextBlock Text="Finalizar OS" FontSize="14" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
+        </StackPanel>
+
+      </StackPanel>
+    </Grid>
+  </ScrollViewer>
+</Page>

@@ -1,0 +1,81 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.Indicators"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:oxy="http://oxyplot.org/wpf"
+      Background="{StaticResource BackgroundBrush}"
+      Title="Indicadores">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="24" MaxWidth="1200">
+
+      <StackPanel Margin="0,0,0,12">
+        <TextBlock Text="Painel de Indicadores" FontSize="22" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+        <TextBlock Text="Visão consolidada de disponibilidade, custos e paradas do ano atual" Foreground="{StaticResource TextSecondaryBrush}" FontSize="13" Margin="0,6,0,0"/>
+      </StackPanel>
+
+      <UniformGrid Columns="4" Margin="0,0,0,20" HorizontalAlignment="Stretch">
+        <Border Background="White" CornerRadius="8" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,12,0">
+          <StackPanel>
+            <TextBlock Text="Disponibilidade" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"/>
+            <TextBlock Text="{Binding AvailabilityFormatted}" FontSize="28" FontWeight="Bold" Foreground="#10B981" Margin="0,8,0,0"/>
+            <ProgressBar Value="{Binding Availability}" Maximum="100" Height="8" Margin="0,12,0,0" Foreground="#10B981" Background="#E5E7EB"/>
+            <TextBlock Text="Meta anual" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+          </StackPanel>
+        </Border>
+
+        <Border Background="White" CornerRadius="8" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,12,0">
+          <StackPanel>
+            <TextBlock Text="Custo do mês" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"/>
+            <TextBlock Text="{Binding CurrentMonthCostFormatted}" FontSize="28" FontWeight="Bold" Foreground="#2563EB" Margin="0,8,0,0"/>
+            <TextBlock Text="{Binding CostInsight}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0" TextWrapping="Wrap"/>
+          </StackPanel>
+        </Border>
+
+        <Border Background="White" CornerRadius="8" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,12,0">
+          <StackPanel>
+            <TextBlock Text="OS registradas" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"/>
+            <TextBlock Text="{Binding TotalOsFormatted}" FontSize="28" FontWeight="Bold" Foreground="#F59E0B" Margin="0,8,0,0"/>
+            <TextBlock Text="{Binding OsMixInsight}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+          </StackPanel>
+        </Border>
+
+        <Border Background="White" CornerRadius="8" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+          <StackPanel>
+            <TextBlock Text="Paradas (mês)" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"/>
+            <TextBlock Text="{Binding CurrentMonthDowntimeFormatted}" FontSize="28" FontWeight="Bold" Foreground="#EF4444" Margin="0,8,0,0"/>
+            <TextBlock Text="{Binding DowntimeInsight}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+          </StackPanel>
+        </Border>
+      </UniformGrid>
+
+      <Grid Margin="0,0,0,20">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="24" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+          <StackPanel>
+            <TextBlock Text="Custos Mensais (Terceirizada vs Peças)" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+            <oxy:PlotView x:Name="MonthlyCostsPlotView" Model="{Binding MonthlyCostsModel}" Height="360" Background="Transparent"/>
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+          <StackPanel>
+            <TextBlock Text="Histórico Anual de Manutenções Corretivas" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+            <oxy:PlotView x:Name="AnnualCorrectivePlotView" Model="{Binding AnnualCorrectiveModel}" Height="360" Background="Transparent"/>
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <Border Background="White" CornerRadius="12" Padding="16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+        <StackPanel>
+          <TextBlock Text="Gastos por Máquina" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+          <oxy:PlotView x:Name="MachineCostsPlotView" Model="{Binding MachineCostsModel}" Height="420" Background="Transparent"/>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</Page>

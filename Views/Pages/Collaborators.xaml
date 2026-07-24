@@ -1,0 +1,56 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.Collaborators"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#F9FAFB" Title="Colaboradores">
+
+  <Grid Margin="24" MaxWidth="1000" HorizontalAlignment="Center">
+    <StackPanel>
+      <TextBlock Text="Colaboradores" FontSize="28" FontWeight="Bold" Foreground="#14110E"/>
+      <TextBlock Text="Gerencie os colaboradores que podem ser atribuídos como mão de obra." Foreground="#6B7280" Margin="0,4,0,16"/>
+
+      <Border Background="White" CornerRadius="12" Padding="16" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,16">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <StackPanel Width="260" Margin="0,0,12,0">
+            <TextBlock Text="Nome" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}"/>
+          </StackPanel>
+          <StackPanel Width="260" Margin="0,0,12,0">
+            <TextBlock Text="Função" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding NewFunction, UpdateSourceTrigger=PropertyChanged}"/>
+          </StackPanel>
+          <Button Content="Adicionar" Command="{Binding AddCommand}" Padding="12,6" VerticalAlignment="Bottom"/>
+        </StackPanel>
+      </Border>
+
+      <Border Background="White" CornerRadius="12" Padding="12" BorderBrush="#E5E7EB" BorderThickness="1">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+          </Grid.ColumnDefinitions>
+
+          <ListView ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}" Margin="0,0,12,0">
+            <ListView.View>
+              <GridView>
+                <GridViewColumn Header="Nome" Width="300" DisplayMemberBinding="{Binding Name}" />
+                <GridViewColumn Header="Função" Width="300" DisplayMemberBinding="{Binding Function}" />
+              </GridView>
+            </ListView.View>
+          </ListView>
+
+          <StackPanel Grid.Column="1" DataContext="{Binding SelectedProfile}">
+            <TextBlock Text="Detalhes" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8"/>
+            <TextBlock Text="Nome" FontSize="12"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8"/>
+            <TextBlock Text="Função" FontSize="12"/>
+            <TextBox Text="{Binding Function, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+              <Button Content="Salvar" Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType=Page}}" Width="90" Margin="0,0,8,0"/>
+              <Button Content="Excluir" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}" Width="90"/>
+            </StackPanel>
+          </StackPanel>
+        </Grid>
+      </Border>
+    </StackPanel>
+  </Grid>
+</Page>

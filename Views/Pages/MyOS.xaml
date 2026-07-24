@@ -1,0 +1,558 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.MyOS"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#F9FAFB" Title="Minhas OS">
+
+  <Grid>
+    <!-- MAIN CONTENT -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <Grid Margin="32" MaxWidth="1200" HorizontalAlignment="Center">
+        <StackPanel>
+          <!-- Header -->
+          <TextBlock Text="Minhas Ordens de Serviço" FontSize="28" FontWeight="Bold" Foreground="#14110E" />
+          <TextBlock Text="Visualize as OS que você registrou" Foreground="#6B7280" FontSize="15" Margin="0,4,0,24"/>
+
+          <!-- Card -->
+          <Border Background="White" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,32">
+            <StackPanel>
+              <!-- Card Header -->
+              <Border Padding="24,20" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="500"/>
+                  </Grid.ColumnDefinitions>
+                  
+                  <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="📋" FontSize="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Histórico de OS   " FontSize="18" FontWeight="SemiBold" Foreground="#14110E" VerticalAlignment="Center"/>
+                  </StackPanel>
+
+                  <Border Grid.Column="2" Background="White" CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="40">
+                    <Grid>
+                      <TextBlock Text="🔍" FontSize="14" Foreground="#9CA3AF" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                      <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                               BorderThickness="0" Background="Transparent" Padding="32,0,12,0" 
+                               VerticalContentAlignment="Center" FontSize="14"/>
+                    </Grid>
+                  </Border>
+                </Grid>
+              </Border>
+
+              <!-- Loading State -->
+              <Border Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" 
+                      Background="#F3F4F6" CornerRadius="8" Padding="32" Margin="0,16,0,16" HorizontalAlignment="Center">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock Text="⏳ Carregando suas OS..." Foreground="#6B7280" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,8" FontWeight="Medium"/>
+                  <TextBlock Text="Isso pode levar alguns segundos..." Foreground="#9CA3AF" FontSize="12" HorizontalAlignment="Center" FontStyle="Italic"/>
+                </StackPanel>
+              </Border>
+
+              <!-- Error State -->
+              <Border Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}" 
+                      Background="#FEE2E2" CornerRadius="8" Padding="16" Margin="0,16,0,16" BorderBrush="#FECACA" BorderThickness="1">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  
+                  <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="❌ Erro ao carregar OS" Foreground="#991B1B" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="#7F1D1D" FontSize="12" TextWrapping="Wrap"/>
+                  </StackPanel>
+                  
+                  <Button Grid.Column="1" Command="{Binding LoadRecordsCommand}" 
+                          Background="#DC2626" Foreground="White" BorderThickness="0" Cursor="Hand"
+                          Padding="16,8" Height="36" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="🔄 Tentar Novamente" FontWeight="SemiBold" FontSize="12"/>
+                  </Button>
+                </Grid>
+              </Border>
+
+              <!-- Empty State -->
+              <TextBlock Visibility="{Binding Records.Count, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}"
+                         Text="Nenhuma OS encontrada" Foreground="#9CA3AF" FontSize="15" FontStyle="Italic" 
+                         HorizontalAlignment="Center" Margin="0,48,0,48"/>
+
+              <!-- Data loaded successfully -->
+              <StackPanel Visibility="{Binding Records.Count, Converter={StaticResource BoolToVisibilityConverter}}">
+                <!-- Search and Results Header -->
+                <TextBlock Text="{Binding TotalRecords, StringFormat='📊 Carregadas {0} OS'}" 
+                           Foreground="#6B7280" FontSize="12" Margin="24,0,0,12" FontStyle="Italic"/>
+
+                <!-- Table -->
+                <DataGrid ItemsSource="{Binding Records}"
+                          AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                          BorderThickness="0" RowHeight="64" Background="Transparent"
+                          HorizontalGridLinesBrush="#F3F4F6" Padding="24" Margin="0,0,0,16"
+                          PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                          VirtualizingStackPanel.IsVirtualizing="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling"
+                          EnableRowVirtualization="True">
+                <!-- Column Header Style to match tailwind table -->
+                <DataGrid.Resources>
+                  <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#6B7280"/>
+                    <Setter Property="FontWeight" Value="Medium"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Padding" Value="16,12"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                  </Style>
+                  <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="16,0"/>
+                    <Setter Property="Template">
+                      <Setter.Value>
+                        <ControlTemplate TargetType="DataGridCell">
+                          <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                          </Border>
+                        </ControlTemplate>
+                      </Setter.Value>
+                    </Setter>
+                  </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                  <!-- Data -->
+                  <DataGridTemplateColumn Header="Data" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy} às {0:HH:mm}}" FontFamily="Consolas" FontSize="13" Foreground="#374151"/>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- Tipo -->
+                  <DataGridTemplateColumn Header="Tipo" Width="140">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Border CornerRadius="4" Padding="8,4" HorizontalAlignment="Left">
+                          <Border.Style>
+                            <Style TargetType="Border">
+                              <Setter Property="Background" Value="#FEE2E2"/> <!-- Corretiva Default -->
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="preventiva">
+                                  <Setter Property="Background" Value="#DBEAFE"/>
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </Border.Style>
+                          <TextBlock FontSize="12" FontWeight="Medium">
+                            <TextBlock.Style>
+                              <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="⚠️ Corretiva"/>
+                                <Setter Property="Foreground" Value="#991B1B"/>
+                                <Style.Triggers>
+                                  <DataTrigger Binding="{Binding Type}" Value="preventiva">
+                                    <Setter Property="Text" Value="✅ Preventiva"/>
+                                    <Setter Property="Foreground" Value="#1E40AF"/>
+                                  </DataTrigger>
+                                </Style.Triggers>
+                              </Style>
+                            </TextBlock.Style>
+                          </TextBlock>
+                        </Border>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- Máquina -->
+                  <DataGridTemplateColumn Header="Máquina" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <StackPanel VerticalAlignment="Center">
+                          <!-- In Web it shows Name then Tag. Here we have Tag in MachineTag and Area in Area. -->
+                          <!-- Let's show Tag and Area -->
+                          <TextBlock Text="{Binding MachineTag}" FontWeight="Medium" FontSize="14" Foreground="#14110E"/>
+                          <TextBlock Text="{Binding Area}" FontSize="13" Foreground="#6B7280"/>
+                        </StackPanel>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- Natureza -->
+                  <DataGridTemplateColumn Header="Natureza" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Border CornerRadius="4" Padding="8,4" HorizontalAlignment="Left">
+                          <Border.Style>
+                            <Style TargetType="Border">
+                              <Setter Property="Background" Value="#FEF3C7"/> <!-- Mecânica Default -->
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding Nature}" Value="eletrica">
+                                  <Setter Property="Background" Value="#DBEAFE"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Nature}" Value="outro">
+                                  <Setter Property="Background" Value="#F3E8FF"/>
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </Border.Style>
+                          <TextBlock FontSize="12" FontWeight="Medium">
+                            <TextBlock.Text>
+                              <MultiBinding Converter="{StaticResource NatureDisplayConverter}">
+                                <Binding Path="Nature"/>
+                                <Binding Path="CustomNature"/>
+                              </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Style>
+                              <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="#92400E"/>
+                                <Style.Triggers>
+                                  <DataTrigger Binding="{Binding Nature}" Value="eletrica">
+                                    <Setter Property="Foreground" Value="#1E40AF"/>
+                                  </DataTrigger>
+                                  <DataTrigger Binding="{Binding Nature}" Value="outro">
+                                    <Setter Property="Foreground" Value="#6B21A8"/>
+                                  </DataTrigger>
+                                </Style.Triggers>
+                              </Style>
+                            </TextBlock.Style>
+                          </TextBlock>
+                        </Border>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- Status -->
+                  <DataGridTemplateColumn Header="Status" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Border Background="#DCFCE7" CornerRadius="4" Padding="8,4" HorizontalAlignment="Left">
+                          <TextBlock Text="{Binding Status}" Foreground="#166534" FontSize="12" FontWeight="Medium"/>
+                        </Border>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                  <!-- Ações -->
+                  <DataGridTemplateColumn Header="Ações" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Button Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                CommandParameter="{Binding}"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="8,4">
+                          <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="👁" Margin="0,0,4,0" Foreground="#374151"/>
+                            <TextBlock Text="Ver" Foreground="#374151" FontWeight="Medium"/>
+                          </StackPanel>
+                        </Button>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                </DataGrid.Columns>
+              </DataGrid>
+
+              <!-- Pagination Controls -->
+              <Border Background="#F3F4F6" CornerRadius="8" Padding="16" Margin="0,16,0,0">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+
+                  <!-- Previous Button -->
+                  <Button Grid.Column="0" Command="{Binding PreviousPageCommand}" 
+                          Background="White" BorderBrush="#D1D5DB" BorderThickness="1" Cursor="Hand" 
+                          Padding="12,8" Height="36" Width="100" Margin="0,0,8,0">
+                    <TextBlock Text="← Anterior" Foreground="#374151" FontWeight="Medium" FontSize="13"/>
+                  </Button>
+
+                  <!-- Page Info -->
+                  <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Foreground="#6B7280" FontSize="13" Margin="0,0,4,0">
+                      <Run Text="Página"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding CurrentPage}" Foreground="#14110E" FontWeight="Bold" FontSize="13" Margin="0,0,4,0"/>
+                    <TextBlock Foreground="#6B7280" FontSize="13" Margin="0,0,4,0">
+                      <Run Text="de"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding TotalPages}" Foreground="#14110E" FontWeight="Bold" FontSize="13" Margin="0,0,12,0"/>
+                    <TextBlock Foreground="#9CA3AF" FontSize="12" FontStyle="Italic">
+                      <Run Text="("/>
+                      <Run Text="{Binding TotalRecords}"/>
+                      <Run Text=" registros)"/>
+                    </TextBlock>
+                  </StackPanel>
+
+                  <!-- Next Button -->
+                  <Button Grid.Column="2" Command="{Binding NextPageCommand}" 
+                          Background="White" BorderBrush="#D1D5DB" BorderThickness="1" Cursor="Hand" 
+                          Padding="12,8" Height="36" Width="100" Margin="8,0,0,0">
+                    <TextBlock Text="Próxima →" Foreground="#374151" FontWeight="Medium" FontSize="13"/>
+                  </Button>
+                </Grid>
+              </Border>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </ScrollViewer>
+
+    <!-- DIALOG OVERLAY -->
+    <Grid Visibility="{Binding IsDetailsOpen, Converter={StaticResource BoolToVisibilityConverter}}" Background="#80000000">
+      <Border Background="White" CornerRadius="12" Width="850" VerticalAlignment="Center" HorizontalAlignment="Center" 
+              MaxHeight="700" Margin="24">
+        <Border.Effect>
+          <DropShadowEffect Color="Black" Opacity="0.15" BlurRadius="20" ShadowDepth="4" />
+        </Border.Effect>
+
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+          <!-- Dialog Header -->
+          <Border Grid.Row="0" Padding="24" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+            <Grid>
+              <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="#14110E">
+                <Run Text="Detalhes da OS - "/>
+                <Run Text="{Binding SelectedRecord.Type}"/>
+              </TextBlock>
+              <Button Command="{Binding CloseDetailsCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                      Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="4">
+                <TextBlock Text="✕" FontSize="18" Foreground="#6B7280" FontWeight="Bold"/>
+              </Button>
+            </Grid>
+          </Border>
+
+          <!-- Dialog Content -->
+          <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,8,0">
+            <StackPanel Margin="24,24,16,24">
+              
+              <!-- Equipamento (oculto para Nova Instalação) -->
+              <Border Background="#F3F4F6" CornerRadius="8" Padding="16" Margin="0,0,0,16">
+                <Border.Visibility>
+                  <MultiBinding Converter="{StaticResource TypeToVisibilityConverter}">
+                    <Binding Path="SelectedRecord.Type"/>
+                  </MultiBinding>
+                </Border.Visibility>
+                <StackPanel>
+                  <TextBlock Text="Equipamento" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,8"/>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0">
+                      <TextBlock Text="Tag" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                      <TextBlock Text="{Binding SelectedRecord.MachineTag}" FontWeight="Medium" Foreground="#14110E" FontSize="14"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1">
+                      <TextBlock Text="Área" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                      <TextBlock Text="{Binding SelectedRecord.Area}" FontWeight="Medium" Foreground="#14110E" FontSize="14"/>
+                    </StackPanel>
+                  </Grid>
+                </StackPanel>
+              </Border>
+
+              <!-- Informações Gerais (Solicitante, Natureza, Tipo de Instalação) -->
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                  <TextBlock Text="Solicitante" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                  <TextBlock Text="{Binding SelectedRecord.Requester}" FontWeight="Medium" Foreground="#14110E" FontSize="14"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="Natureza" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                  <TextBlock FontWeight="Medium" Foreground="#14110E" FontSize="14">
+                    <TextBlock.Text>
+                      <MultiBinding Converter="{StaticResource NatureDisplayConverter}">
+                        <Binding Path="SelectedRecord.Nature"/>
+                        <Binding Path="SelectedRecord.CustomNature"/>
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2" Visibility="{Binding SelectedRecord.Observations, Converter={StaticResource StringToVisibilityConverter}}">
+                  <TextBlock Text="Tipo de Instalação" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                  <TextBlock Text="{Binding SelectedRecord.Observations}" FontWeight="Medium" Foreground="#14110E" FontSize="14"/>
+                </StackPanel>
+              </Grid>
+
+              <!-- Tempos -->
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                  <TextBlock Text="Início" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                  <TextBlock Text="{Binding SelectedRecord.StartTime, StringFormat={}{0:dd/MM/yyyy} às {0:HH:mm}}" FontWeight="Medium" Foreground="#14110E" FontSize="14"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="Fim" Foreground="#6B7280" FontSize="13" Margin="0,0,0,2"/>
+                  <TextBlock Text="{Binding SelectedRecord.EndTime, StringFormat={}{0:dd/MM/yyyy} às {0:HH:mm}}" FontWeight="Medium" Foreground="#14110E" FontSize="14"/>
+                </StackPanel>
+              </Grid>
+
+              <!-- Informações Gerais (Activities, Incidents, Comments) -->
+              <StackPanel>
+
+                <!-- Activities List -->
+                <StackPanel Visibility="{Binding SelectedRecord.Activities.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                  <TextBlock Text="Falha Aparente" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,4"/>
+                  <ItemsControl ItemsSource="{Binding SelectedRecord.Activities}" Margin="0,0,0,16">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Description}" Foreground="#6B7280" FontSize="14" TextWrapping="Wrap"/>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+
+                <!-- Incidents List -->
+                <StackPanel Visibility="{Binding SelectedRecord.Incidents.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                  <TextBlock Text="Trabalho Executado" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,4"/>
+                  <ItemsControl ItemsSource="{Binding SelectedRecord.Incidents}" Margin="0,0,0,16">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Description}" Foreground="#6B7280" FontSize="14" TextWrapping="Wrap"/>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+
+                <!-- Comments List -->
+                <StackPanel Visibility="{Binding SelectedRecord.Comments.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                  <TextBlock Text="Comentários" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,4"/>
+                  <ItemsControl ItemsSource="{Binding SelectedRecord.Comments}" Margin="0,0,0,16">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Description}" Foreground="#6B7280" FontSize="14" TextWrapping="Wrap"/>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+
+                <!-- Checklist (mostrar apenas itens OK) -->
+                <StackPanel Visibility="{Binding SelectedRecord, Converter={StaticResource HistoricChecklistVisibilityConverter}}">
+                  <TextBlock Text="Checklist (itens OK)" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,4"/>
+                  <ItemsControl ItemsSource="{Binding SelectedRecord.ChecklistItems, Converter={StaticResource ChecklistOkItemsConverter}}" Margin="0,0,0,16">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <Border Background="#EFF6FF" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="✅" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding Description}" Foreground="#1E40AF" FontSize="14" TextWrapping="Wrap"/>
+                          </StackPanel>
+                        </Border>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+
+                <!-- Items -->
+                <TextBlock Text="Itens Utilizados" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,8"/>
+                <ItemsControl ItemsSource="{Binding SelectedRecord.Items}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="#F3F4F6" CornerRadius="6" Padding="12,8" Margin="0,0,0,8">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <TextBlock Grid.Column="0" FontSize="14" VerticalAlignment="Center">
+                            <Run Text="{Binding Description}"/> <Run Text=" (x"/><Run Text="{Binding Quantity}"/><Run Text=")"/>
+                          </TextBlock>
+                          <TextBlock Grid.Column="1" Text="{Binding UnitCost, StringFormat=C}" FontWeight="Medium" FontSize="14" VerticalAlignment="Center"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border BorderBrush="#E5E7EB" BorderThickness="0,1,0,0" Margin="0,8,0,0" Padding="0,8,0,0">
+                  <TextBlock HorizontalAlignment="Right" FontSize="15">
+                    <Run Text="Total: " FontWeight="Medium"/>
+                    <Run Text="{Binding SelectedRecord.TotalCost, StringFormat=C}" FontWeight="Bold"/>
+                  </TextBlock>
+                </Border>
+              </StackPanel>
+
+              <!-- Mão de Obra -->
+              <StackPanel Visibility="{Binding SelectedRecord.LaborForce.Count, Converter={StaticResource CountToVisibilityConverter}}" Margin="0,0,0,16">
+                <TextBlock Text="Mão de Obra" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,8"/>
+                <ItemsControl ItemsSource="{Binding SelectedRecord.LaborForce}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="#F9FAFB" CornerRadius="8" Padding="12" Margin="0,0,0,8" BorderBrush="#E5E7EB" BorderThickness="1">
+                        <TextBlock Text="{Binding Description}" FontSize="14" Foreground="#14110E" TextWrapping="Wrap"/>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+
+              <!-- Observations -->
+              <!-- Photos -->
+              <Border Background="#F3F4F6" CornerRadius="8" Padding="12" Margin="0,16,0,16">
+                <StackPanel>
+                  <TextBlock Text="Fotos" FontWeight="Medium" Foreground="#14110E" Margin="0,0,0,8"/>
+                  <ItemsControl ItemsSource="{Binding SelectedRecord.Photos}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <Border Background="#FFFFFF" Padding="6" Margin="0,0,12,12" Width="120">
+                          <StackPanel>
+                            <Border Height="76" Background="#E5E7EB" CornerRadius="6" Cursor="Hand">
+                              <Image Source="{Binding FilePath}" Stretch="UniformToFill" MouseLeftButtonUp="OpenPhoto"
+                                     RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </Border>
+                            <TextBlock Text="{Binding FileName}" FontSize="12" Foreground="#14110E" Margin="0,8,0,0" TextTrimming="CharacterEllipsis"/>
+                          </StackPanel>
+                        </Border>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+
+
+
+            </StackPanel>
+          </ScrollViewer>
+
+          <!-- Dialog Footer -->
+          <Border Grid.Row="2" Padding="24" BorderBrush="#E5E7EB" BorderThickness="0,1,0,0" Background="#F9FAFB" CornerRadius="0,0,12,12">
+            <Button Command="{Binding CloseDetailsCommand}" Content="Fechar" Cursor="Hand" Width="100" Height="40" HorizontalAlignment="Right">
+              <Button.Template>
+                <ControlTemplate TargetType="Button">
+                  <Border Background="White" CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1">
+                    <TextBlock Text="Fechar" FontSize="14" FontWeight="SemiBold" Foreground="#374151" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Border>
+                </ControlTemplate>
+              </Button.Template>
+            </Button>
+          </Border>
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</Page>

@@ -1,0 +1,370 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.Users"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:TTXEquipamentos.Converters"
+      Background="#F3F4F6"
+      Title="Usuários"
+      Loaded="Page_Loaded">
+
+  <Grid>
+    <!-- Main Content -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <StackPanel Margin="32,24,32,24">
+        <!-- Header -->
+        <StackPanel Margin="0,0,0,24">
+          <TextBlock Text="Usuários" FontSize="32" FontWeight="Bold" Foreground="#111827" Margin="0,0,0,8"/>
+          <TextBlock Text="Gerencie os usuários e níveis de acesso" Foreground="#6B7280" FontSize="15"/>
+        </StackPanel>
+
+        <!-- Search Bar -->
+        <Border Background="White" CornerRadius="8" Padding="0" BorderBrush="#D1D5DB" BorderThickness="1" Margin="0,0,0,24" Height="44">
+          <Grid Margin="12,0,12,0">
+            <TextBlock Text="🔍" Foreground="#9CA3AF" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Foreground="#111827"
+                     CaretBrush="#111827"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Padding="32,0,0,0"
+                     VerticalAlignment="Center"
+                     FontSize="14"/>
+          </Grid>
+        </Border>
+
+        <!-- Tabs Container -->
+        <StackPanel x:Name="TabsContainer" Margin="0,0,0,24">
+          <!-- Tab Headers -->
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+            <Border x:Name="Tab_Approved" Background="White" BorderBrush="White" BorderThickness="0,0,0,3" Padding="0,0,32,12" Cursor="Hand"
+                    MouseLeftButtonDown="TabApproved_Click">
+              <TextBlock Text="Aprovados" FontSize="15" FontWeight="SemiBold" Foreground="#111827"/>
+            </Border>
+            <Border x:Name="Tab_Pending" Background="Transparent" BorderBrush="Transparent" BorderThickness="0,0,0,3" Padding="0,0,32,12" Cursor="Hand"
+                    MouseLeftButtonDown="TabPending_Click">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Pendentes" FontSize="15" FontWeight="Normal" Foreground="#6B7280" Margin="0,0,8,0"/>
+                <Border Background="#DC2626" CornerRadius="10" Padding="6,2,6,2">
+                  <TextBlock Text="{Binding PendingUsers.Count}" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                </Border>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+          <Border Background="#E5E7EB" Height="1" Margin="0,0,0,0"/>
+        </StackPanel>
+
+        <!-- Approved Users Tab Content -->
+        <Border x:Name="ApprovedContent" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="24,16,24,16">
+              <TextBlock Text="Usuários Aprovados" FontSize="15" FontWeight="SemiBold" Foreground="#111827"/>
+            </Border>
+            
+            <DataGrid Grid.Row="1" 
+                      ItemsSource="{Binding ApprovedUsersView}"
+                      AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                      HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                      BorderThickness="0" RowHeight="48" Background="Transparent"
+                      HorizontalGridLinesBrush="#E5E7EB"
+                      Foreground="#111827"
+                      Padding="0">
+              <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                  <Setter Property="Background" Value="Transparent"/>
+                  <Setter Property="Foreground" Value="#6B7280"/>
+                  <Setter Property="FontSize" Value="13"/>
+                  <Setter Property="FontWeight" Value="SemiBold"/>
+                  <Setter Property="Padding" Value="24,12,24,12"/>
+                  <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+              </DataGrid.ColumnHeaderStyle>
+              
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Nome" Binding="{Binding Profile.Name}" Width="200" Foreground="#111827">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Margin" Value="24,0,0,0"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                      <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTextColumn Header="E-mail" Binding="{Binding Profile.Email}" Width="280" Foreground="#6B7280">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Margin" Value="24,0,0,0"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTemplateColumn Header="Nível de Acesso" Width="160">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Border Padding="12,4,12,4" CornerRadius="12" Margin="24,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock x:Name="RoleBadge" Foreground="White" FontSize="12" FontWeight="SemiBold" TextAlignment="Center"/>
+                      </Border>
+                      <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Role}" Value="admin">
+                          <Setter TargetName="RoleBadge" Property="Background" Value="#DC2626"/>
+                          <Setter TargetName="RoleBadge" Property="Text" Value="Administrador"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Role}" Value="supervisor">
+                          <Setter TargetName="RoleBadge" Property="Background" Value="#2563EB"/>
+                          <Setter TargetName="RoleBadge" Property="Text" Value="Supervisor"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Role}" Value="tecnico">
+                          <Setter TargetName="RoleBadge" Property="Background" Value="#16A34A"/>
+                          <Setter TargetName="RoleBadge" Property="Text" Value="Técnico"/>
+                        </DataTrigger>
+                      </DataTemplate.Triggers>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Ações" Width="*">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,24,0">
+                        <Button Content="Acesso" Background="Transparent" Foreground="#3B82F6" BorderThickness="0" FontSize="13"
+                                Command="{Binding DataContext.OpenRoleDialogCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}" Padding="8,4" Cursor="Hand"/>
+                        <Separator Width="1" Background="#E5E7EB" Margin="8,0,8,0"/>
+                        <Button Content="Senha" Background="Transparent" Foreground="#3B82F6" BorderThickness="0" FontSize="13"
+                                Command="{Binding DataContext.OpenPasswordDialogCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}" Padding="8,4" Cursor="Hand"/>
+                        <Separator Width="1" Background="#E5E7EB" Margin="8,0,8,0"/>
+                        <Button Content="Deletar" Background="Transparent" Foreground="#DC2626" BorderThickness="0" FontSize="13"
+                                Command="{Binding DataContext.OpenDeleteDialogCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}" Padding="8,4" Cursor="Hand"/>
+                      </StackPanel>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </Border>
+
+        <!-- Pending Users Tab Content -->
+        <Border x:Name="PendingContent" Background="White" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24" Visibility="Collapsed">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="24,16,24,16">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Usuários Aguardando Aprovação" FontSize="15" FontWeight="SemiBold" Foreground="#111827"/>
+                <TextBlock Text="{Binding PendingUsers.Count, StringFormat=' ({0})'}" FontSize="15" FontWeight="Normal" Foreground="#6B7280"/>
+              </StackPanel>
+            </Border>
+            
+            <DataGrid Grid.Row="1" 
+                      ItemsSource="{Binding PendingUsersView}"
+                      AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                      HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                      BorderThickness="0" RowHeight="48" Background="Transparent"
+                      HorizontalGridLinesBrush="#E5E7EB"
+                      Foreground="#111827">
+              <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                  <Setter Property="Background" Value="Transparent"/>
+                  <Setter Property="Foreground" Value="#6B7280"/>
+                  <Setter Property="FontSize" Value="13"/>
+                  <Setter Property="FontWeight" Value="SemiBold"/>
+                  <Setter Property="Padding" Value="24,12,24,12"/>
+                  <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+              </DataGrid.ColumnHeaderStyle>
+              
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Nome" Binding="{Binding Profile.Name}" Width="200" Foreground="#111827">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Margin" Value="24,0,0,0"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                      <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTextColumn Header="E-mail" Binding="{Binding Profile.Email}" Width="280" Foreground="#6B7280">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Margin" Value="24,0,0,0"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTextColumn Header="Data de Registro" Binding="{Binding Profile.CreatedAt, StringFormat=dd/MM/yyyy}" Width="150" Foreground="#6B7280">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Margin" Value="24,0,0,0"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTemplateColumn Header="Ações" Width="*">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,24,0">
+                        <Button Content="Aprovar" Background="#16A34A" Foreground="White" BorderThickness="0" FontSize="13" Padding="12,6,12,6"
+                                Command="{Binding DataContext.OpenApproveDialogCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}" Cursor="Hand">
+                          <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                              <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                              </Border>
+                            </ControlTemplate>
+                          </Button.Template>
+                        </Button>
+                        <Separator Width="8" Background="Transparent"/>
+                        <Button Content="Recusar" Background="#DC2626" Foreground="White" BorderThickness="0" FontSize="13" Padding="12,6,12,6"
+                                Command="{Binding DataContext.OpenDeleteDialogCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}" Cursor="Hand">
+                          <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                              <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                              </Border>
+                            </ControlTemplate>
+                          </Button.Template>
+                        </Button>
+                      </StackPanel>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Dialogs Overlay -->
+    <Grid x:Name="RoleDialogOverlay" Visibility="Collapsed" Background="#000000" Opacity="0.5" Panel.ZIndex="100"/>
+    
+    <!-- Role Dialog -->
+    <Border x:Name="RoleDialogBorder" 
+            Visibility="Collapsed"
+            Panel.ZIndex="101"
+            Background="White" 
+            CornerRadius="8" 
+            Padding="24"
+            Width="400"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+      <Border.Effect>
+        <DropShadowEffect BlurRadius="16" ShadowDepth="4" Color="#00000033"/>
+      </Border.Effect>
+      <StackPanel>
+        <TextBlock Text="Alterar Nível de Acesso" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,16" Foreground="{StaticResource TextPrimaryBrush}"/>
+        
+        <TextBlock Text="Usuário:" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+        <TextBlock Text="{Binding SelectedUserForRole.Profile.Name}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,16" Foreground="{StaticResource TextPrimaryBrush}"/>
+        
+        <TextBlock Text="Nível de Acesso" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+        <ComboBox Margin="0,0,0,16"
+                  SelectedValuePath="Tag" SelectedValue="{Binding SelectedRole}">
+          <ComboBoxItem Tag="tecnico" Content="Técnico"/>
+          <ComboBoxItem Tag="supervisor" Content="Supervisor"/>
+          <ComboBoxItem Tag="admin" Content="Administrador"/>
+        </ComboBox>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+          <Button Content="Cancelar" Style="{StaticResource SecondaryButton}" 
+                  Command="{Binding CloseDialogCommand}" CommandParameter="role" Padding="8,4" MinWidth="80"/>
+          <Button x:Name="RoleDialogSubmitBtn" Content="Salvar"
+                  Style="{StaticResource PrimaryButton}"
+                  Background="{StaticResource PrimaryBrush}" BorderBrush="{StaticResource PrimaryBrush}" Foreground="White"
+                  Command="{Binding AssignRoleCommand}" Padding="16,4" MinWidth="80" Margin="8,0,0,0"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Password Dialog -->
+    <Border x:Name="PasswordDialogBorder" 
+            Visibility="Collapsed"
+            Panel.ZIndex="101"
+            Background="White" 
+            CornerRadius="8" 
+            Padding="24"
+            Width="400"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+      <Border.Effect>
+        <DropShadowEffect BlurRadius="16" ShadowDepth="4" Color="#00000033"/>
+      </Border.Effect>
+      <StackPanel>
+        <TextBlock Text="Redefinir Senha" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,16" Foreground="{StaticResource TextPrimaryBrush}"/>
+        
+        <TextBlock Text="Usuário:" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+        <TextBlock Text="{Binding SelectedUserForRole.Profile.Name}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,16" Foreground="{StaticResource TextPrimaryBrush}"/>
+        
+        <TextBlock Text="Nova Senha" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+        <TextBox Margin="0,0,0,12"
+                 Text="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Border Background="#FEF3C7" CornerRadius="4" Padding="12" Margin="0,0,0,16" BorderBrush="#FCD34D" BorderThickness="1">
+          <TextBlock Text="Nota: Por segurança, recomendamos que o usuário altere a senha através do seu próprio perfil." 
+                     FontSize="12" Foreground="#92400E" TextWrapping="Wrap"/>
+        </Border>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+          <Button Content="Cancelar" Style="{StaticResource SecondaryButton}" 
+                  Command="{Binding CloseDialogCommand}" CommandParameter="password" Padding="8,4" MinWidth="80"/>
+          <Button Content="Redefinir" Style="{StaticResource PrimaryButton}"
+                  Background="{StaticResource PrimaryBrush}" BorderBrush="{StaticResource PrimaryBrush}" Foreground="White"
+                  Command="{Binding ResetPasswordCommand}" Padding="16,4" MinWidth="80" Margin="8,0,0,0"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Delete Dialog -->
+    <Border x:Name="DeleteDialogBorder" 
+            Visibility="Collapsed"
+            Panel.ZIndex="101"
+            Background="White" 
+            CornerRadius="8" 
+            Padding="24"
+            Width="420"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+      <Border.Effect>
+        <DropShadowEffect BlurRadius="16" ShadowDepth="4" Color="#00000033"/>
+      </Border.Effect>
+      <StackPanel>
+        <TextBlock Text="Deletar Usuário" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,16" Foreground="{StaticResource TextPrimaryBrush}"/>
+        
+        <Border Background="#FEE2E2" CornerRadius="4" Padding="12" Margin="0,0,0,16" BorderBrush="#FCA5A5" BorderThickness="1">
+          <TextBlock Text="⚠️ Atenção: Esta ação é irreversível!" FontSize="12" Foreground="#991B1B" FontWeight="SemiBold"/>
+        </Border>
+        
+        <TextBlock Text="Tem certeza que deseja deletar o usuário " FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding UserToDelete.Profile.Name}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+        <TextBlock Text="{Binding UserToDelete.Profile.Email, StringFormat='({0})?'}" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,12"/>
+        
+        <TextBlock Text="Todos os dados associados a este usuário serão removidos permanentemente." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,16"/>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+          <Button Content="Cancelar" Style="{StaticResource SecondaryButton}" 
+                  Command="{Binding CloseDialogCommand}" CommandParameter="delete" Padding="8,4" MinWidth="80"/>
+          <Button Content="Deletar Permanentemente" Style="{StaticResource DangerButton}"
+                  Background="#DC2626" BorderBrush="#DC2626" Foreground="White"
+                  Command="{Binding DeleteUserCommand}" Padding="16,4" MinWidth="160" Margin="8,0,0,0"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+  </Grid>
+
+</Page>

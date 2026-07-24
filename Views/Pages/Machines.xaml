@@ -1,0 +1,344 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.Machines"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BackgroundBrush}"
+      Title="Máquinas">
+
+  <Grid>
+    <!-- Main Content -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="False">
+      <StackPanel Margin="24" MaxWidth="1200">
+
+        <!-- ═══════════════════════════════════ -->
+        <!-- HEADER: Title + Add Button          -->
+        <!-- ═══════════════════════════════════ -->
+        <DockPanel Margin="0,0,0,24">
+          <StackPanel>
+            <TextBlock Text="Máquinas" FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+            <TextBlock Text="Gerencie o cadastro de equipamentos" FontSize="14"
+                       Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+          </StackPanel>
+          <Button DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
+                  Command="{Binding OpenNewDialogCommand}" Cursor="Hand"
+                  Padding="16,10" FontSize="14" FontWeight="SemiBold"
+                  Background="{StaticResource PrimaryBrush}" Foreground="White" BorderThickness="0">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6"
+                        Padding="{TemplateBinding Padding}">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="＋" FontSize="14" FontWeight="Bold" Foreground="White" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Nova Máquina" FontSize="14" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </Border>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Bd" Property="Background" Value="#C45200"/>
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
+        </DockPanel>
+
+        <!-- ═══════════════════════════════════ -->
+        <!-- TABLE CARD                          -->
+        <!-- ═══════════════════════════════════ -->
+        <Border Background="White" CornerRadius="8" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+          <StackPanel>
+            <!-- Card Header with Search -->
+            <DockPanel Margin="20,16,20,16">
+              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="🔧" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Equipamentos Cadastrados" FontSize="16" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+              </StackPanel>
+              <Border DockPanel.Dock="Right" HorizontalAlignment="Right" CornerRadius="6"
+                      BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Width="260">
+                <DockPanel>
+                  <TextBlock Text="🔍" DockPanel.Dock="Left" Margin="10,0,6,0" FontSize="14" VerticalAlignment="Center"
+                             Foreground="{StaticResource TextSecondaryBrush}"/>
+                  <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                           BorderThickness="0" Background="Transparent" Padding="4,8"
+                           FontSize="14" VerticalContentAlignment="Center"
+                           />
+                </DockPanel>
+              </Border>
+            </DockPanel>
+
+            <!-- Separator -->
+            <Border Height="1" Background="{StaticResource BorderBrush}"/>
+
+            <!-- Table -->
+            <DataGrid x:Name="MachinesDataGrid" ItemsSource="{Binding MachinesView}" AutoGenerateColumns="False"
+                      IsReadOnly="True" HeadersVisibility="Column"
+                      CanUserAddRows="False" CanUserDeleteRows="False"
+                      CanUserResizeRows="False" SelectionMode="Single"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="{StaticResource BorderBrush}"
+                      BorderThickness="0" Background="White"
+                      RowHeight="52" FontSize="14"
+                      ColumnHeaderHeight="44"
+                      ScrollViewer.CanContentScroll="False"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
+
+              <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                  <Setter Property="Background" Value="#FAF8F6"/>
+                  <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                  <Setter Property="FontSize" Value="13"/>
+                  <Setter Property="FontWeight" Value="SemiBold"/>
+                  <Setter Property="Padding" Value="16,0"/>
+                  <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                  <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                </Style>
+              </DataGrid.ColumnHeaderStyle>
+
+              <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                  <Setter Property="Background" Value="White"/>
+                  <Setter Property="VerticalContentAlignment" Value="Center"/>
+                  <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                      <Setter Property="Background" Value="#FAF8F6"/>
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </DataGrid.RowStyle>
+
+              <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                  <Setter Property="BorderThickness" Value="0"/>
+                  <Setter Property="Padding" Value="16,0"/>
+                  <Setter Property="VerticalAlignment" Value="Stretch"/>
+                  <Setter Property="VerticalContentAlignment" Value="Center"/>
+                  <Setter Property="Template">
+                    <Setter.Value>
+                      <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
+                                VerticalAlignment="Stretch">
+                          <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                      </ControlTemplate>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </DataGrid.CellStyle>
+
+              <DataGrid.Columns>
+                <!-- Nome -->
+                <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="*">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="FontWeight" Value="Medium"/>
+                      <Setter Property="Foreground" Value="#14110E"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Tag (monospace badge) -->
+                <DataGridTemplateColumn Header="Tag" Width="120">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Border CornerRadius="4" Background="#F3F0ED" Padding="8,4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Tag}" FontFamily="Consolas" FontSize="13" Foreground="#14110E"/>
+                      </Border>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Área -->
+                <DataGridTextColumn Header="Área" Binding="{Binding Area}" Width="150">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Foreground" Value="#14110E"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Tipo (colored badge) -->
+                <DataGridTemplateColumn Header="Tipo" Width="120">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Border x:Name="TypeBadge" CornerRadius="4" Padding="8,4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock x:Name="TypeText" FontSize="12" FontWeight="Medium"/>
+                      </Border>
+                      <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Type}" Value="eletrica">
+                          <Setter TargetName="TypeBadge" Property="Background" Value="#EBF5FF"/>
+                          <Setter TargetName="TypeText" Property="Foreground" Value="#3B82F6"/>
+                          <Setter TargetName="TypeText" Property="Text" Value="Elétrica"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Type}" Value="mecanica">
+                          <Setter TargetName="TypeBadge" Property="Background" Value="#FFFBEB"/>
+                          <Setter TargetName="TypeText" Property="Foreground" Value="#F59E0B"/>
+                          <Setter TargetName="TypeText" Property="Text" Value="Mecânica"/>
+                        </DataTrigger>
+                      </DataTemplate.Triggers>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Ações (Edit + Delete) -->
+                <DataGridTemplateColumn Header="Ações" Width="120">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <!-- Edit button -->
+                        <Button Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" Cursor="Hand"
+                                Background="Transparent" BorderThickness="0" Padding="8,6" Margin="0,0,4,0">
+                          <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                              <Border x:Name="Bd" Background="Transparent" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                <TextBlock Text="✏️" FontSize="14" Foreground="#14110E"/>
+                              </Border>
+                              <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                  <Setter TargetName="Bd" Property="Background" Value="#F3F0ED"/>
+                                </Trigger>
+                              </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                          </Button.Template>
+                        </Button>
+                        <!-- Delete button -->
+                        <Button Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" Cursor="Hand"
+                                Background="Transparent" BorderThickness="0" Padding="8,6">
+                          <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                              <Border x:Name="Bd" Background="Transparent" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                <TextBlock Text="🗑️" FontSize="14" Foreground="#EF4444"/>
+                              </Border>
+                              <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                  <Setter TargetName="Bd" Property="Background" Value="#FEF2F2"/>
+                                </Trigger>
+                              </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                          </Button.Template>
+                        </Button>
+                      </StackPanel>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Empty state -->
+            <TextBlock Text="Nenhuma máquina encontrada" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"
+                       HorizontalAlignment="Center" Margin="0,32,0,32"
+                       Visibility="{Binding MachinesView.IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- DIALOG OVERLAY -->
+    <Grid Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+      <Border Background="#80000000">
+        <Border.InputBindings>
+          <MouseBinding MouseAction="LeftClick" Command="{Binding CancelCommand}"/>
+        </Border.InputBindings>
+      </Border>
+
+      <Border Background="White" CornerRadius="12"
+              Width="600" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border.Effect>
+          <DropShadowEffect ShadowDepth="0" BlurRadius="24" Opacity="0.15"/>
+        </Border.Effect>
+
+        <StackPanel Margin="40,32,40,36">
+
+          <TextBlock Text="{Binding DialogTitle}" FontSize="22" FontWeight="Bold"
+                     Foreground="#14110E" Margin="0,0,0,24"/>
+
+          <!-- Nome -->
+          <TextBlock Text="Nome do Equipamento" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+          <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42" Margin="0,0,0,4">
+            <TextBox Text="{Binding FormName, UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="0" Background="Transparent" FontSize="14" Padding="12,8"
+                     VerticalContentAlignment="Center" Foreground="#14110E"/>
+          </Border>
+          <TextBlock Text="{Binding NameError}" FontSize="11" Foreground="#EF4444" Margin="0,2,0,8"
+                     Visibility="{Binding NameError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+          <!-- Tag -->
+          <TextBlock Text="Tag/ID" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,4,0,6"/>
+          <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42" Margin="0,0,0,4">
+            <TextBox Text="{Binding FormTag, UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="0" Background="Transparent" FontSize="14" Padding="12,8"
+                     VerticalContentAlignment="Center" Foreground="#14110E"/>
+          </Border>
+          <TextBlock Text="{Binding TagError}" FontSize="11" Foreground="#EF4444" Margin="0,2,0,8"
+                     Visibility="{Binding TagError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+          <!-- Área -->
+          <TextBlock Text="Área" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,4,0,6"/>
+          <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42" Margin="0,0,0,4">
+            <TextBox Text="{Binding FormArea, UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="0" Background="Transparent" FontSize="14" Padding="12,8"
+                     VerticalContentAlignment="Center" Foreground="#14110E"/>
+          </Border>
+          <TextBlock Text="{Binding AreaError}" FontSize="11" Foreground="#EF4444" Margin="0,2,0,8"
+                     Visibility="{Binding AreaError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+          <!-- Tipo -->
+          <TextBlock Text="Tipo" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,4,0,6"/>
+          <Border CornerRadius="6" BorderBrush="#D1D5DB" BorderThickness="1" Height="42">
+            <ComboBox SelectedValue="{Binding FormType}" SelectedValuePath="Tag"
+                      BorderThickness="0" Background="Transparent" FontSize="14" Padding="8,0"
+                      VerticalContentAlignment="Center">
+              <ComboBoxItem Content="Elétrica" Tag="eletrica"/>
+              <ComboBoxItem Content="Mecânica" Tag="mecanica"/>
+            </ComboBox>
+          </Border>
+
+          <!-- Buttons centered -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,28,0,0">
+            <Button Command="{Binding CancelCommand}" Cursor="Hand" Width="150" Height="44" Margin="0,0,12,0">
+              <Button.Template>
+                <ControlTemplate TargetType="Button">
+                  <Border x:Name="Bd" Background="#F3F4F6" CornerRadius="8" BorderBrush="#D1D5DB" BorderThickness="1">
+                    <TextBlock Text="Cancelar" FontSize="14" FontWeight="SemiBold" Foreground="#374151"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                      <Setter TargetName="Bd" Property="Background" Value="#E5E7EB"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Button.Template>
+            </Button>
+            <Button Command="{Binding SaveCommand}" Cursor="Hand" Width="150" Height="44">
+              <Button.Template>
+                <ControlTemplate TargetType="Button">
+                  <Border x:Name="Bd" Background="#FF6A00" CornerRadius="8">
+                    <Grid>
+                      <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="White" Text="Cadastrar"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}"/>
+                      <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="White" Text="Salvar"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                      <Setter TargetName="Bd" Property="Background" Value="#E05E00"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Button.Template>
+            </Button>
+          </StackPanel>
+
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Page>

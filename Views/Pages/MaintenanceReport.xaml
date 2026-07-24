@@ -1,0 +1,412 @@
+<Page x:Class="TTXEquipamentos.Views.Pages.MaintenanceReport"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#F9FAFB" Title="Relatório de Manutenção">
+  <Page.Resources>
+    <Style TargetType="TextBox">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Foreground" Value="#14110E"/>
+      <Setter Property="Padding" Value="12"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="#D1D5DB"/>
+    </Style>
+  </Page.Resources>
+  
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel>
+      <!-- HEADER WITH LOGO -->
+      <Border Background="White" BorderBrush="#E5E7EB" BorderThickness="0,0,0,2" Padding="32">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+
+          <!-- Logo Left -->
+          <StackPanel Grid.Column="0" VerticalAlignment="Center">
+            <TextBlock Text="TTX" FontSize="32" FontWeight="Bold" Foreground="#FF6B35"/>
+            <TextBlock Text="EQUIPAMENTOS &amp; MANUTENÇÃO INDUSTRIAL" FontSize="10" Foreground="#6B7280"/>
+          </StackPanel>
+
+          <!-- Title Center -->
+          <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Relatório de Manutenção" FontSize="16" FontWeight="Bold" Foreground="#14110E" HorizontalAlignment="Center" TextAlignment="Center"/>
+          </StackPanel>
+
+          <!-- Report Info Right -->
+          <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <Grid Margin="0,0,0,8">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0" Text="Relatório nº" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,8,0"/>
+              <TextBlock Grid.Column="1" Text="{Binding ReportNumber}" FontSize="12" FontWeight="Bold" Foreground="#14110E"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,8">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0" Text="Data" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,8,0"/>
+              <TextBlock Grid.Column="1" Text="{Binding SelectedDate, StringFormat='dd/MM/yyyy'}" FontSize="12" FontWeight="Bold" Foreground="#14110E"/>
+            </Grid>
+
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0" Text="Dia" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,8,0"/>
+              <TextBlock Grid.Column="1" Text="{Binding DayOfWeek}" FontSize="12" FontWeight="Bold" Foreground="#14110E"/>
+            </Grid>
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <!-- MAIN CONTENT -->
+      <Grid Margin="32" MaxWidth="1200" HorizontalAlignment="Center">
+        <StackPanel>
+
+          <!-- Equipment Section -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <TextBlock Text="Equipamento / Área" FontSize="16" FontWeight="Bold" Foreground="#14110E" Margin="0,0,0,16"/>
+              
+              <TextBlock Text="Equipamento" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+              <TextBox Text="{Binding EquipmentName, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" Foreground="#14110E" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" Height="40" Margin="0,0,0,16" 
+                       FontSize="14" AcceptsReturn="False"/>
+
+              <TextBlock Text="Área" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+              <TextBox Text="{Binding Area, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" Foreground="#14110E" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" Height="40" 
+                       FontSize="14" AcceptsReturn="False"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Weather Conditions -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <TextBlock Text="Condição Climática" FontSize="16" FontWeight="Bold" Foreground="#14110E" Margin="0,0,0,16"/>
+              
+              <!-- Time periods -->
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Morning -->
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                  <TextBlock Text="Manhã" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,0,6"/>
+                  <ComboBox Background="White" BorderBrush="#D1D5DB" BorderThickness="1" Padding="8" Height="36" >
+                    <ComboBoxItem>Claro</ComboBoxItem>
+                    <ComboBoxItem>Nublado</ComboBoxItem>
+                    <ComboBoxItem>Chuvoso</ComboBoxItem>
+                  </ComboBox>
+                </StackPanel>
+
+                <!-- Afternoon -->
+                <StackPanel Grid.Column="1" Margin="8,0,8,0">
+                  <TextBlock Text="Tarde" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,0,6"/>
+                  <ComboBox Background="White" BorderBrush="#D1D5DB" BorderThickness="1" Padding="8" Height="36" >
+                    <ComboBoxItem>Claro</ComboBoxItem>
+                    <ComboBoxItem>Nublado</ComboBoxItem>
+                    <ComboBoxItem>Chuvoso</ComboBoxItem>
+                  </ComboBox>
+                </StackPanel>
+
+                <!-- Night -->
+                <StackPanel Grid.Column="2" Margin="8,0,0,0">
+                  <TextBlock Text="Noite" FontSize="12" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,0,6"/>
+                  <ComboBox Background="White" BorderBrush="#D1D5DB" BorderThickness="1" Padding="8" Height="36" >
+                    <ComboBoxItem>Claro</ComboBoxItem>
+                    <ComboBoxItem>Nublado</ComboBoxItem>
+                    <ComboBoxItem>Chuvoso</ComboBoxItem>
+                  </ComboBox>
+                </StackPanel>
+              </Grid>
+
+              <!-- Rainfall -->
+              <TextBlock Text="Índice Pluviométrico (mm)" FontSize="13" FontWeight="SemiBold" Foreground="#14110E" Margin="0,0,0,6"/>
+              <TextBox Text="{Binding RainfallIndex, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" Foreground="#14110E" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" Height="40" 
+                       FontSize="14" AcceptsReturn="False"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Maintenance Description -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <TextBlock Text="Descrição da Manutenção" FontSize="16" FontWeight="Bold" Foreground="#14110E" Margin="0,0,0,16"/>
+              
+              <TextBox Text="{Binding MaintenanceDescription, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" Foreground="#14110E" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" Height="80" TextWrapping="Wrap" 
+                       FontSize="14" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Labor Force -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Mão de Obra ({0})" FontSize="16" FontWeight="Bold" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="+ Adicionar" Background="#3B82F6" Foreground="White" 
+                        Padding="12,8"  FontWeight="SemiBold" 
+                        Command="{Binding AddLaborCommand}" Cursor="Hand"/>
+              </Grid>
+
+              <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding NewLaborItem, UpdateSourceTrigger=PropertyChanged}" 
+                         Background="White" BorderBrush="#D1D5DB" BorderThickness="1" 
+                         Padding="12" Height="36" FontSize="13" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="Adicionar" Background="#10B981" Foreground="White" 
+                        Margin="8,0,0,0" Padding="8"  FontWeight="SemiBold" 
+                        Command="{Binding AddLaborCommand}" Cursor="Hand"/>
+              </Grid>
+
+              <ItemsControl ItemsSource="{Binding LaborForce}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="#F3F4F6" Padding="12" Margin="0,0,0,8" >
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Description}" Foreground="#14110E" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="✕" Background="#EF4444" Foreground="White" 
+                                Width="24" Height="24" Padding="0"  FontWeight="Bold" 
+                                Command="{Binding DataContext.RemoveLaborCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                CommandParameter="{Binding}" Cursor="Hand" Margin="8,0,0,0"/>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Equipment -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Equipamentos ({0})" FontSize="16" FontWeight="Bold" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="+ Adicionar" Background="#3B82F6" Foreground="White" 
+                        Padding="12,8"  FontWeight="SemiBold" 
+                        Command="{Binding AddEquipmentCommand}" Cursor="Hand"/>
+              </Grid>
+
+              <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding NewEquipmentItem, UpdateSourceTrigger=PropertyChanged}" 
+                         Background="White" BorderBrush="#D1D5DB" BorderThickness="1" 
+                         Padding="12" Height="36" FontSize="13" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="Adicionar" Background="#10B981" Foreground="White" 
+                        Margin="8,0,0,0" Padding="8"  FontWeight="SemiBold" 
+                        Command="{Binding AddEquipmentCommand}" Cursor="Hand"/>
+              </Grid>
+
+              <ItemsControl ItemsSource="{Binding EquipmentName}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="#F3F4F6" Padding="12" Margin="0,0,0,8" >
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Description}" Foreground="#14110E" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="✕" Background="#EF4444" Foreground="White" 
+                                Width="24" Height="24" Padding="0"  FontWeight="Bold" 
+                                Command="{Binding DataContext.RemoveEquipmentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                CommandParameter="{Binding}" Cursor="Hand" Margin="8,0,0,0"/>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Activities -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <TextBlock Text="Trabalho executado" FontSize="16" FontWeight="Bold" Foreground="#14110E" Margin="0,0,0,16"/>
+
+              <TextBox Text="{Binding NewActivityItem, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" MinHeight="80" FontSize="13" Foreground="#14110E" 
+                       TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Incidents -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Descrição ({0})" FontSize="16" FontWeight="Bold" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="+ Adicionar" Background="#3B82F6" Foreground="White" 
+                        Padding="12,8"  FontWeight="SemiBold" 
+                        Command="{Binding AddIncidentCommand}" Cursor="Hand"/>
+              </Grid>
+
+              <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding NewIncidentItem, UpdateSourceTrigger=PropertyChanged}" 
+                         Background="White" BorderBrush="#D1D5DB" BorderThickness="1" 
+                         Padding="12" Height="36" FontSize="13" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="Adicionar" Background="#10B981" Foreground="White" 
+                        Margin="8,0,0,0" Padding="8"  FontWeight="SemiBold" 
+                        Command="{Binding AddIncidentCommand}" Cursor="Hand"/>
+              </Grid>
+
+              <ItemsControl ItemsSource="{Binding Incidents}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="#F3F4F6" Padding="12" Margin="0,0,0,8" >
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Description}" Foreground="#14110E" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="✕" Background="#EF4444" Foreground="White" 
+                                Width="24" Height="24" Padding="0"  FontWeight="Bold" 
+                                Command="{Binding DataContext.RemoveIncidentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                CommandParameter="{Binding}" Cursor="Hand" Margin="8,0,0,0"/>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Comments -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <TextBlock Text="Comentários" FontSize="16" FontWeight="Bold" Foreground="#14110E" Margin="0,0,0,16"/>
+
+              <TextBox Text="{Binding NewCommentItem, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" MinHeight="80" FontSize="13" Foreground="#14110E" 
+                       TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Photos -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Fotos ({0})" FontSize="16" FontWeight="Bold" Foreground="#14110E"/>
+                <Button Grid.Column="1" Content="+ Adicionar" Background="#3B82F6" Foreground="White" 
+                        Padding="12,8"  FontWeight="SemiBold" 
+                        Click="AddPhotoButton_Click" Cursor="Hand" x:Name="AddPhotoBtn"/>
+              </Grid>
+
+              <ItemsControl ItemsSource="{Binding Photos}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="#F3F4F6" Padding="8" Margin="0,0,12,12" Width="150">
+                      <StackPanel>
+                        <Border Height="96" Background="#E5E7EB" CornerRadius="6" Cursor="Hand">
+                          <Image Source="{Binding FilePath}" Stretch="UniformToFill" MouseLeftButtonUp="OpenPhoto"/>
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                          <TextBlock Text="{Binding FileName}" FontSize="12" Foreground="#14110E" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Width="96"/>
+                          <Button Command="{Binding DataContext.RemovePhotoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Padding="6,2" Cursor="Hand" HorizontalAlignment="Right">
+                            <Button.Template>
+                              <ControlTemplate TargetType="Button">
+                                <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                                  <TextBlock Text="✕" FontSize="12" FontWeight="Bold" Foreground="#EF4444"/>
+                                </Border>
+                              </ControlTemplate>
+                            </Button.Template>
+                          </Button>
+                        </StackPanel>
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Observations -->
+          <Border Background="White" Padding="24" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,0,0,24">
+            <StackPanel>
+              <TextBlock Text="Observações Adicionais" FontSize="16" FontWeight="Bold" Foreground="#14110E" Margin="0,0,0,16"/>
+              <TextBox Text="{Binding Observations, UpdateSourceTrigger=PropertyChanged}" 
+                       Background="White" Foreground="#14110E" BorderBrush="#D1D5DB" BorderThickness="1" 
+                       Padding="12" Height="80" TextWrapping="Wrap" 
+                       FontSize="14" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Action Buttons -->
+          <Grid Margin="0,0,0,32">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Cancelar" Background="#E5E7EB" Foreground="#14110E" 
+                    Padding="16,12" FontSize="14" FontWeight="SemiBold" 
+                    Margin="0,0,8,0" Cursor="Hand"/>
+
+            <Button Grid.Column="1" Content="Salvar Relatório" Background="#10B981" Foreground="White" 
+                    Padding="16,12" FontSize="14" FontWeight="SemiBold" 
+                    Command="{Binding SaveReportCommand}" Cursor="Hand"/>
+          </Grid>
+
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+
+</Page>
+
+
+
+
